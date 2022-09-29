@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.17)
 
+# Project definition
 project(
-    "Twilight Escapers"
+    "Sequoia Engine"
     VERSION 0.0.0
     DESCRIPTION "Sequoia is a library for c++ 2d games"
 )
