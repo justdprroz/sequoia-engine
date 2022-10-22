@@ -1,15 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 
-# Project definition
 project(
     "Sequoia Engine"
     VERSION 0.0.0
     DESCRIPTION "Sequoia is a library for c++ 2d games"
 )
 
-include_directories("src")
+set (CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+include_directories("src")
 
 set(
     SEQUIOA_SOURCES
