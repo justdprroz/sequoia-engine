@@ -1,6 +1,6 @@
 // Copyright 2021-2022 JustDprroz
 
-#include "Render.hpp"
+#include "Render/Render.hpp"
 #include <chrono>
 
 TextureManager::TextureManager() {
@@ -54,8 +54,8 @@ void RenderChunk::Update(Chunk& chunk, TextureManager& texture_manager, World &w
         for (int j = 0; j < kChunkSize; j++) {
             sf::Vertex* quad = &vertices_[(i + j * kChunkSize) * 4];
 
-            int id = chunk.blocks_[i][j].GetId();
-            int biome = chunk.blocks_[i][j].GetBiome();
+            int id = chunk.mBlocks[i][j].GetId();
+            int biome = chunk.mBlocks[i][j].GetBiome();
 
             int g_x = p_origin.x * kChunkSize + i;
             int g_y = p_origin.y * kChunkSize + j;

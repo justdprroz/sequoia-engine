@@ -12,9 +12,13 @@ include_directories("src")
 
 set(
     SEQUIOA_SOURCES
-    src/Render.cpp
-    src/Renderer.cpp
-    src/World.cpp
+    src/Render/Render.cpp
+    src/Render/Renderer.cpp
+    src/World/Block.cpp
+    src/World/Chunk.cpp
+    src/World/Entity.cpp
+    src/World/Player.cpp
+    src/World/World.cpp
 )
 
 add_library(

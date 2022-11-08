@@ -8,7 +8,7 @@
 #include <SFML/Graphics.hpp>
 
 // Some base classes
-#include <World.hpp>
+#include <World/World.hpp>
 #include <Utils.hpp>
 
 // Main rendering constants
