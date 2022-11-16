@@ -8,7 +8,12 @@ project(
 
 set (CMAKE_CXX_STANDARD 20)
 
-include_directories("src")
+# Build SFML as static libs and include it
+set(BUILD_SHARED_LIBS FALSE)
+add_subdirectory(${PROJECT_SOURCE_DIR}/SFML)
+
+# use json lib
+add_subdirectory(${PROJECT_SOURCE_DIR}/JSON)
 
 set(
     SEQUIOA_SOURCES
@@ -21,7 +26,8 @@ set(
     src/World/World.cpp
 )
 
-add_library(
-    sequoia STATIC
-    ${SEQUIOA_SOURCES}
-)
+add_library(sequoia STATIC ${SEQUIOA_SOURCES})
+
+target_link_libraries(sequoia sfml-graphics sfml-window sfml-system nlohmann_json::nlohmann_json)
+
+target_include_directories(sequoia PUBLIC "src")
