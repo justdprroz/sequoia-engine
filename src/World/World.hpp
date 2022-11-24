@@ -41,16 +41,15 @@ public:
     void LoadChunks(std::string file_path);
     void SaveChunks(std::string file_path);
     // void GenerateChunk(sf::Vector2i position);
-    void GenerateChunkWIP(sf::Vector2i position);
-    void NoiseInit();
+    void GenerateChunk(sf::Vector2i position);
+    // void NoiseInit();
 private:
-    std::map<std::pair<int, int>, Chunk> chunks_;
-    std::vector<Entity*> entities_;
-    FastNoiseLite noise_block_;
-    FastNoiseLite noise_biome_;
-    PerlinNoise noise_gen_;
-    int seed_;
     friend class RenderWorld;
+    std::map<std::pair<int, int>, Chunk> m_chunks;
+    std::vector<Entity*> m_entities;
+    PerlinNoise m_noise_generator;
+    int m_seed;
+    std::mt19937 m_rng;
 };
 
 #endif /* SEQUOIA_ENGINE_SRC_WORLD_WORLD_ */

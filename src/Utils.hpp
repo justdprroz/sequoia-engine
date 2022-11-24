@@ -23,4 +23,11 @@ T mod(T a, T b){
     return (a % b + b) % b;
 }
 
+template <typename T>
+long long pair(T a, T b) {
+    a %= 65535;
+    b %= 65535;
+    return (a + b) * (a + b + 1) / 2 + a;
+}
+
 #endif

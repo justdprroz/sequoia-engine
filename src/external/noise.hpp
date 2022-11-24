@@ -20,19 +20,19 @@ public:
     };
     ~PerlinNoise(){};
 
-    double EvaluateFBM(double x, double y, 
+    double EvaluateFBM(double x, double y, double z, 
                   double amplitude, double frequency,
                   int octaveCount, double persistence = 0.5, double lacunarity = 2.0) {
 
     double value = 0;
 
     for (int i = 0; i < octaveCount; i++) {
-        value += amplitude * noise(x * frequency, y * frequency);
+        value += amplitude * noise(x * frequency, y * frequency, z * frequency);
         amplitude *= persistence;
         frequency *= lacunarity;
     }
 
-    return value;
+    return (std::clamp(value, -1.0, 1.0) + 1.0) / 2.0;
 }
 
     double noise(const double x = 0.0, const double y = 0.0, const double z = 0.0) const
