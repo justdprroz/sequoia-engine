@@ -107,38 +107,6 @@ void World::LoadChunks(std::string file_path)
     chunkslist.close();
 }
 
-// TODO: Great world generation
-// void World::GenerateChunk(sf::Vector2i position)
-// {
-//     for (int i = 0; i < kChunkSize; i++)
-//     {
-//         for (int j = 0; j < kChunkSize; j++)
-//         {
-//             float noiseHeightValue = noise_block_.GetNoise(static_cast<float>(i + position.x * kChunkSize), static_cast<float>(j + position.y * kChunkSize));
-//             int blockId = static_cast<int>(LinearInterpolation(noiseHeightValue, -1.f, 1.0f, 0.0f, 2.0f));
-
-//             float noiseBiomeValue = noise_biome_.GetNoise(static_cast<float>(i + position.x * kChunkSize), static_cast<float>(j + position.y * kChunkSize));
-//             float biomeInterpolated = LinearInterpolation(noiseBiomeValue, -1.f, 1.0f, 0.0f, 3.0f);
-
-//             int biomeId = 0;
-//             if (InRange(biomeInterpolated, 0.0f, 0.5f))
-//             {
-//                 biomeId = 0;
-//             }
-//             else if (InRange(biomeInterpolated, 0.5f, 0.9f))
-//             {
-//                 biomeId = 1;
-//             }
-//             else if (InRange(biomeInterpolated, 0.9f, 1.1f))
-//             {
-//                 biomeId = 2;
-//             }
-//             chunks_[{position.x, position.y}].PlaceBlock({i, j}, {blockId, 0});
-//         }
-//     }
-//     chunks_[{position.x, position.y}].SetGenerated();
-// }
-
 // ! USED FOR FIXING NON NEGATIVE INPUT FOR NOISE FUNCTION
 #define NOISE_OFFSET 1'000'000
 
@@ -146,6 +114,7 @@ void World::GenerateChunk(sf::Vector2i position)
 {
     long long paired_val = pair(position.x, position.y);
     m_rng.seed(paired_val);
+    std::uniform_int_distribution dist(0, 1023);
     for (int i = 0; i < kChunkSize; i++)
     {
         for (int j = 0; j < kChunkSize; j++)
@@ -161,7 +130,15 @@ void World::GenerateChunk(sf::Vector2i position)
                 data["FREQUENCY"],
                 data["OCTAVES"]);
             int blockId = INT_MAX;
-            if (blockNoise < 0.5)
+            if (blockNoise < 0.2)
+            {
+                blockId = 2;
+            }
+            else if (blockNoise < 0.4)
+            {
+                blockId = 1;
+            }
+            else if (blockNoise < 0.5)
             {
                 blockId = 0;
             }
@@ -175,7 +152,7 @@ void World::GenerateChunk(sf::Vector2i position)
                 static_cast<float>(current_x),
                 static_cast<float>(current_y),
                 1'000'000,
-                3,
+                1.0,
                 0.005,
                 2);
             int biomeId = INT_MAX;
@@ -183,7 +160,7 @@ void World::GenerateChunk(sf::Vector2i position)
             {
                 biomeId = 0;
             }
-            else if (noiseBiomeValue < 0.9)
+            else if (noiseBiomeValue < 0.8)
             {
                 biomeId = 2;
             }
@@ -193,10 +170,14 @@ void World::GenerateChunk(sf::Vector2i position)
             }
 
             // Generate features
-            std::uniform_int_distribution dist(0, 1023);
-            if (dist(m_rng) <= 10 && blockId != 0) {
-                std::cerr << "TREE!\n";
-                blockId = 3;
+            int feature_weight = dist(m_rng);
+            if (blockId == 1) {
+                if (feature_weight <= 10)
+                {
+                    blockId = 3;
+                } else if (feature_weight <= (10 + 70)) {
+                    blockId = 3 + (feature_weight - 10) / 5;
+                }
             }
             m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, biomeId});
         }

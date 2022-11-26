@@ -5,6 +5,7 @@
 #include <cmath>
 #include <random>
 #include <limits>
+#include <Utils.hpp>
 
 class PerlinNoise
 {

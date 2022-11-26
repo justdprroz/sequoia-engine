@@ -72,66 +72,139 @@ void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &w
             int g_x = p_origin.x * kChunkSize + i;
             int g_y = p_origin.y * kChunkSize + j;
 
-            int tx = 0, ty = 0;
+            int sX = 0, sY = 0, woX = 0, woY = 0, toX = 0, toY = 0;
 
-            if (id == 0 || id == 1)
+            if (id == 0) // path
             {
-                if (id == 0)
-                {
-                    // FIXME: TODO: Properly implement textures connections
-                    int lx = 0;
-                    int ly = 0;
-                    // if (world.GetBlock({p_origin.x * 16 + i - 1, p_origin.y * 16 + j}).GetId() == 1) {
-                    //     lx = -1;
-                    // }
-                    // if (world.GetBlock({p_origin.x * 16 + i + 1, p_origin.y * 16 + j}).GetId() == 1) {
-                    //     lx = 1;
-                    // }
-                    // if (world.GetBlock({p_origin.x * 16 + i, p_origin.y * 16 + j - 1}).GetId() == 1) {
-                    //     ly = -1;
-                    // }
-                    // if (world.GetBlock({p_origin.x * 16 + i, p_origin.y * 16 + j + 1}).GetId() == 1) {
-                    //     ly = 1;
-                    // }
-                    if (ly == 0 && lx == 0)
-                    {
-                        tx = 4 + biome * 21;
-                        ty = 0 + mod((g_y + g_x * 2), 4);
-                    }
-                    else
-                    {
-                        // Never accessed
-                        tx = lx + 2 + biome * 21;
-                        ty = ly + 1;
-                    }
-                }
-                if (id == 1)
-                {
-                    tx = 0 + biome * 21;
-                    ty = 1 + mod((g_y + g_x * 2), 4);
-                }
-                // FIXME: Vertical lines artifacts
-                quad[0].position = sf::Vector2f(i * TILE_SIZE, j * TILE_SIZE);
-                quad[1].position = sf::Vector2f((i + 1) * TILE_SIZE, j * TILE_SIZE);
-                quad[2].position = sf::Vector2f((i + 1) * TILE_SIZE, (j + 1) * TILE_SIZE);
-                quad[3].position = sf::Vector2f(i * TILE_SIZE, (j + 1) * TILE_SIZE);
-                quad[0].texCoords = sf::Vector2f(tx * TEXTURE_SIZE, ty * TEXTURE_SIZE);
-                quad[1].texCoords = sf::Vector2f((tx + 1) * TEXTURE_SIZE, ty * TEXTURE_SIZE);
-                quad[2].texCoords = sf::Vector2f((tx + 1) * TEXTURE_SIZE, (ty + 1) * TEXTURE_SIZE);
-                quad[3].texCoords = sf::Vector2f(tx * TEXTURE_SIZE, (ty + 1) * TEXTURE_SIZE);
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 4;
+                toY = 0 + mod((g_y * 281 + g_x * 491) % 89, 4);
             }
-            else if (id == 3)
+            else if (id == 1) // grass
             {
-                quad[0].position = sf::Vector2f((i - 2) * TILE_SIZE, (j - 6) * TILE_SIZE);
-                quad[1].position = sf::Vector2f((i + 3) * TILE_SIZE, (j - 6) * TILE_SIZE);
-                quad[2].position = sf::Vector2f((i + 3) * TILE_SIZE, (j + 1) * TILE_SIZE);
-                quad[3].position = sf::Vector2f((i - 2) * TILE_SIZE, (j + 1) * TILE_SIZE);
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 0;
+                toY = 1 + mod((g_y * 281 + g_x * 491) % 89, 4);
+            }
+            else if (id == 2) // water
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 19;
+                toY = 13;
+            }
+            else if (id == 3) // tree
+            {
+                sX = 5, sY = 6;
+                woX = i - 2, woY = j - 5;
+                toX = 0, toY = 6;
+            }
+            else if (id == 4) // decor_stone_small_1
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 7;
+                toY = 0;
+            }
+            else if (id == 5) // decor_stone_small_2
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 8;
+                toY = 0;
+            }
+            else if (id == 6) // decor_flower_1
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 8;
+                toY = 7;
+            }
+            else if (id == 7) // decor_flower_2
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 7;
+                toY = 8;
+            }
+            else if (id == 8) // decor_flower_3
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 8;
+                toY = 8;
+            }
+            else if (id == 9) // decor_flower_4
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 6, toY = 9;
+            }
+            else if (id == 10) // decor_flower_5
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 7, toY = 9;
+            }
+            else if (id == 11) // decor_flower_6
+            {
+                sX = 1, sY = 1;
+                woX = i, woY = j;
+                toX = 8, toY = 9;
+            }
 
-                quad[0].texCoords = sf::Vector2f(biome * 21 * TEXTURE_SIZE, 6 * TEXTURE_SIZE);
-                quad[1].texCoords = sf::Vector2f((biome * 21 + 5) * TEXTURE_SIZE, 6 * TEXTURE_SIZE);
-                quad[2].texCoords = sf::Vector2f((biome * 21 + 5) * TEXTURE_SIZE, 12 * TEXTURE_SIZE);
-                quad[3].texCoords = sf::Vector2f(biome * 21 * TEXTURE_SIZE, 12 * TEXTURE_SIZE);
+            else if (id == 12) // big_stone
+            {
+                sX = 2, sY = 2;
+                woX = i, woY = j - 1;
+                toX = 5, toY = 0;
             }
+            else if (id == 13) // small_tree_trunk
+            {
+                sX = 2, sY = 2;
+                woX = i, woY = j - 1;
+                toX = 5, toY = 2;
+            }
+            else if (id == 14) // vertical_trunk
+            {
+                sX = 2, sY = 3;
+                woX = i, woY = j - 2;
+                toX = 7, toY = 1;
+            }
+            else if (id == 15) // horizontal_trunk
+            {
+                sX = 3, sY = 2;
+                woX = i, woY = j - 1;
+                toX = 6, toY = 4;
+            }
+            else if (id == 16) // rabbit_hole
+            {
+                sX = 2, sY = 1;
+                woX = i, woY = j;
+                toX = 7, toY = 6;
+            }
+            else if (id == 17) // bush
+            {
+                sX = 2, sY = 2;
+                woX = i, woY = j - 1;
+                toX = 5, toY = 7;
+            }
+            else {
+                std::cout << id << "\n";
+            }
+            toX += biome * 21;
+
+            quad[0].position = sf::Vector2f(woX * TILE_SIZE, woY * TILE_SIZE);
+            quad[1].position = sf::Vector2f((woX + sX) * TILE_SIZE, woY * TILE_SIZE);
+            quad[2].position = sf::Vector2f((woX + sX) * TILE_SIZE, (woY + sY) * TILE_SIZE);
+            quad[3].position = sf::Vector2f(woX * TILE_SIZE, (woY + sY) * TILE_SIZE);
+
+            quad[0].texCoords = sf::Vector2f(toX * TEXTURE_SIZE, toY * TEXTURE_SIZE);
+            quad[1].texCoords = sf::Vector2f((toX + sX) * TEXTURE_SIZE, toY * TEXTURE_SIZE);
+            quad[2].texCoords = sf::Vector2f((toX + sX) * TEXTURE_SIZE, (toY + sY) * TEXTURE_SIZE);
+            quad[3].texCoords = sf::Vector2f(toX * TEXTURE_SIZE, (toY + sY) * TEXTURE_SIZE);
         }
     }
     setPosition(chunk.GetOrigin().x * kChunkSize * TILE_SIZE, chunk.GetOrigin().y * kChunkSize * TILE_SIZE);
