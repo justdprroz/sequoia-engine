@@ -6,6 +6,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <World/Block.hpp>
 
+const int kChunkSize = 32;
+
 class Chunk
 {
 public:
@@ -23,7 +25,7 @@ public:
 private:
     sf::Vector2i mOrigin;
     bool mIsGenerated;
-    std::array<std::array<Block, 16>, 16> mBlocks;
+    std::array<std::array<Block, kChunkSize>, kChunkSize> mBlocks;
     friend class RenderChunk;
     friend class Renderer;
 };

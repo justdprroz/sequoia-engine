@@ -107,21 +107,25 @@ void World::LoadChunks(std::string file_path)
     chunkslist.close();
 }
 
-// ! USED FOR FIXING NON NEGATIVE INPUT FOR NOISE FUNCTION
+// !USED FOR FIXING NON NEGATIVE INPUT FOR NOISE FUNCTION
 #define NOISE_OFFSET 1'000'000
 
 void World::GenerateChunk(sf::Vector2i position)
 {
-    long long paired_val = pair(position.x, position.y);
-    m_rng.seed(paired_val);
-    std::uniform_int_distribution dist(0, 1023);
+    GenerateChunkHeightMap(position);
+    GenerateChunkBiomeMap(position);
+    GenerateChunkFeatures(position);
+    m_chunks[{position.x, position.y}].SetGenerated();
+}
+
+void World::GenerateChunkHeightMap(sf::Vector2i position)
+{
     for (int i = 0; i < kChunkSize; i++)
     {
         for (int j = 0; j < kChunkSize; j++)
         {
             int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
             int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
-            // Generate block map
             float blockNoise = m_noise_generator.EvaluateFBM(
                 static_cast<float>(current_x),
                 static_cast<float>(current_y),
@@ -146,8 +150,21 @@ void World::GenerateChunk(sf::Vector2i position)
             {
                 blockId = 1;
             }
+            m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, -1});
+        }
+    }
+}
 
-            // Generate biome map
+void World::GenerateChunkBiomeMap(sf::Vector2i position)
+{
+    for (int i = 0; i < kChunkSize; i++)
+    {
+        for (int j = 0; j < kChunkSize; j++)
+        {
+            int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
+            int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
+            int blockId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetId();
+
             float noiseBiomeValue = m_noise_generator.EvaluateFBM(
                 static_cast<float>(current_x),
                 static_cast<float>(current_y),
@@ -168,34 +185,37 @@ void World::GenerateChunk(sf::Vector2i position)
             {
                 biomeId = 1;
             }
+            m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, biomeId});
+        }
+    }
+}
 
-            // Generate features
+void World::GenerateChunkFeatures(sf::Vector2i position)
+{
+    long long paired_val = pair(position.x, position.y);
+    m_rng.seed(paired_val);
+    std::uniform_int_distribution dist(0, 1023);
+    for (int i = 0; i < kChunkSize; i++)
+    {
+        for (int j = 0; j < kChunkSize; j++)
+        {
+            int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
+            int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
             int feature_weight = dist(m_rng);
-            if (blockId == 1) {
+            int blockId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetId();
+            int biomeId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetBiome();
+            if (blockId == 1)
+            {
                 if (feature_weight <= 10)
                 {
                     blockId = 3;
-                } else if (feature_weight <= (10 + 70)) {
+                }
+                else if (feature_weight <= (10 + 70))
+                {
                     blockId = 3 + (feature_weight - 10) / 5;
                 }
             }
             m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, biomeId});
         }
     }
-    m_chunks[{position.x, position.y}].SetGenerated();
 }
-
-// void World::NoiseInit()
-// {
-//     noise_block_.SetSeed(m_seed);
-//     noise_block_.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2S);
-//     noise_block_.SetFrequency(0.02);
-//     noise_block_.SetFractalType(FastNoiseLite::FractalType_FBm);
-//     noise_block_.SetFractalOctaves(3);
-
-//     noise_biome_.SetSeed(m_seed);
-//     noise_biome_.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
-//     noise_biome_.SetFrequency(0.02);
-//     noise_biome_.SetCellularDistanceFunction(FastNoiseLite::CellularDistanceFunction_Hybrid);
-//     noise_biome_.SetCellularReturnType(FastNoiseLite::CellularReturnType_CellValue);
-// }

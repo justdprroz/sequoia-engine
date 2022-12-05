@@ -124,10 +124,10 @@ void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &w
             }
             else if (id == 7) // decor_flower_2
             {
-                sX = 1, sY = 1;
-                woX = i, woY = j;
+                sX = 1, sY = 2;
+                woX = i, woY = j - 1;
                 toX = 7;
-                toY = 8;
+                toY = 7;
             }
             else if (id == 8) // decor_flower_3
             {
@@ -154,7 +154,6 @@ void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &w
                 woX = i, woY = j;
                 toX = 8, toY = 9;
             }
-
             else if (id == 12) // big_stone
             {
                 sX = 2, sY = 2;

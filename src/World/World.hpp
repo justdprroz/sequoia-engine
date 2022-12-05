@@ -24,8 +24,6 @@
 #include <World/Block.hpp>
 #include <World/Entity.hpp>
 
-const int kChunkSize = 16;
-
 class World {
 public:
     World();
@@ -40,9 +38,10 @@ public:
     void PlaceChunk(sf::Vector2i position);
     void LoadChunks(std::string file_path);
     void SaveChunks(std::string file_path);
-    // void GenerateChunk(sf::Vector2i position);
     void GenerateChunk(sf::Vector2i position);
-    // void NoiseInit();
+    void GenerateChunkHeightMap(sf::Vector2i position);
+    void GenerateChunkBiomeMap(sf::Vector2i position);
+    void GenerateChunkFeatures(sf::Vector2i position);
 private:
     friend class RenderWorld;
     std::map<std::pair<int, int>, Chunk> m_chunks;
