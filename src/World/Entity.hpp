@@ -1,6 +1,8 @@
+#ifndef SEQUOIA_ENGINE_SRC_WORLD_ENTITY_
+#define SEQUOIA_ENGINE_SRC_WORLD_ENTITY_
+
 #include <SFML/System/Vector2.hpp>
-#ifndef SOURCE_WORLD_ENTITY_HPP_
-#define SOURCE_WORLD_ENTITY_HPP_
+
 
 class Entity
 {
@@ -30,4 +32,4 @@ protected:
     int anim_frame_;
 };
 
-#endif // SOURCE_WORLD_ENTITY_HPP_
+#endif /* SEQUOIA_ENGINE_SRC_WORLD_ENTITY_ */

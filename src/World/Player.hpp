@@ -1,9 +1,12 @@
-#ifndef SOURCE_WORLD_PLAYER_HPP_
-#define SOURCE_WORLD_PLAYER_HPP_
+#ifndef SEQUOIA_ENGINE_SRC_WORLD_PLAYER_
+#define SEQUOIA_ENGINE_SRC_WORLD_PLAYER_
 
-#include <World/Entity.hpp>
-#include <SFML/Window/Event.hpp>
 #include <string>
+
+#include <SFML/Window/Event.hpp>
+
+#include "World/Entity.hpp"
+
 
 class Player : public Entity
 {
@@ -18,4 +21,4 @@ private:
     bool pressed_[4] = {false, false, false, false};
 };
 
-#endif // SOURCE_WORLD_PLAYER_HPP_
+#endif /* SEQUOIA_ENGINE_SRC_WORLD_PLAYER_ */

@@ -1,7 +1,10 @@
 #include "Render/WorldRenderer.hpp"
+
 #include <chrono>
 
-extern int RENDERED_VERTICES;
+
+// ! Debug stuff; CREATE LOGGER / INFORMATION POOL
+int RENDERED_VERTICES = 0;
 
 void WorldRenderer::Update(World &world, TextureManager &texture_manager)
 {
@@ -13,14 +16,10 @@ void WorldRenderer::Update(World &world, TextureManager &texture_manager)
 
     tile_atlas_ = texture_manager.GetBlockTilesetPtr();
 
-    // int tile_index = 0;
-    // int decoration_index = vertices_count - 1;
-
     int current_index = 0;
 
     for (auto &chunks_entry : world.GetChunks())
     {
-        // std::cerr << "Getting chunk at: " << chunks_entry.first.first << " " << chunks_entry.first.second << "\n";
         auto &blocks = chunks_entry.second.GetBlocks();
         auto chunk_origin = chunks_entry.second.GetOrigin();
         for (int y = 0; y < kChunkSize; y++) // "Y" coord
@@ -176,8 +175,6 @@ void WorldRenderer::Update(World &world, TextureManager &texture_manager)
                 {
                     std::cerr << "!!!!Wrong block at: " << gX << " " << gY << "\n";
                 }
-
-                // sf::Vertex *quad = &tile_vertices_[(ci) * 4];
 
                 int coX = chunk_origin.x * kChunkSize * TILE_SIZE, coY = chunk_origin.y * kChunkSize * TILE_SIZE;
                 quad[0].position = sf::Vector2f(coX + woX * TILE_SIZE, coY + woY * TILE_SIZE);

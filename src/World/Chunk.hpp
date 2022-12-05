@@ -3,8 +3,11 @@
 
 #include <string>
 #include <array>
+
 #include <SFML/System/Vector2.hpp>
-#include <World/Block.hpp>
+
+#include "World/Block.hpp"
+
 
 const int kChunkSize = 32;
 
@@ -27,8 +30,6 @@ private:
     sf::Vector2i origin_;
     bool is_generated_;
     std::array<std::array<Block, kChunkSize>, kChunkSize> blocks_;
-    friend class RenderChunk;
-    friend class Renderer;
 };
 
 #endif // SOURCE_WORLD_CHUNK_HPP_

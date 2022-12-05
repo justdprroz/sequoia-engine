@@ -1,11 +1,6 @@
 #ifndef SEQUOIA_ENGINE_SRC_RENDER_WORLD_RENDERER_
 #define SEQUOIA_ENGINE_SRC_RENDER_WORLD_RENDERER_
 
-// * Improved World Renderer Prototype
-#include "World/World.hpp"
-#include "Render/Render.hpp"
-
-// SFML Includes
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -13,6 +8,11 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
+#include "World/World.hpp"
+#include "Render/TextureManager.hpp"
+
+
+// * Improved World Renderer Prototype
 class WorldRenderer : public sf::Drawable, public sf::Transformable {
 public:
     void Update(World& world, TextureManager& texture_manager);

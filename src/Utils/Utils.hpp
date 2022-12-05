@@ -1,7 +1,8 @@
-// Copyright 2021-2022 JustDprroz
-
 #ifndef UTILS_HPP
 #define UTILS_HPP
+
+#include <cmath>
+
 
 template <typename T>
 T LinearInterpolation(T x, T minInputRange, T maxInputRange, T minOutputRange, T maxOutputRange) {

@@ -1,7 +1,7 @@
-// Copyright 2021-2022 JustDprroz
-
 #include "World/World.hpp"
+
 #include <nlohmann/json.hpp>
+
 
 extern nlohmann::json data;
 

@@ -1,5 +1,3 @@
-// Copyright 2021-2022 JustDprroz
-
 #ifndef SEQUOIA_ENGINE_SRC_WORLD_WORLD_
 #define SEQUOIA_ENGINE_SRC_WORLD_WORLD_
 
@@ -13,16 +11,16 @@
 #include <map>
 #include <utility>
 #include <fstream>
-#include <SFML/System/Vector2.hpp>
-#include <external/FastNoiseLite.h>
-#include <Utils.hpp>
 #include <climits>
-#include <SFML/Window/Event.hpp>
-#include <external/noise.hpp>
 
-#include <World/Chunk.hpp>
-#include <World/Block.hpp>
-#include <World/Entity.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
+
+#include "Utils/Utils.hpp"
+#include "Utils/Noise.hpp"
+#include "World/Chunk.hpp"
+#include "World/Block.hpp"
+#include "World/Entity.hpp"
 
 class World {
 public:
