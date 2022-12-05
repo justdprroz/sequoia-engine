@@ -3,6 +3,8 @@
 #include "Render/Render.hpp"
 #include <chrono>
 
+int RENDERED_VERTICES = 0;
+
 TextureManager::TextureManager()
 {
 }
@@ -54,7 +56,7 @@ sf::Texture *TextureManager::GetCharacterTexturePtr(int id)
     return &characters_textures_[id];
 }
 
-void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &world)
+void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager)
 {
     vertices_.setPrimitiveType(sf::Quads);
     vertices_.resize(kChunkSize * kChunkSize * 4);
@@ -66,8 +68,8 @@ void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &w
         {
             sf::Vertex *quad = &vertices_[(i + j * kChunkSize) * 4];
 
-            int id = chunk.mBlocks[i][j].GetId();
-            int biome = chunk.mBlocks[i][j].GetBiome();
+            int id = chunk.blocks_[i][j].GetId();
+            int biome = chunk.blocks_[i][j].GetBiome();
 
             int g_x = p_origin.x * kChunkSize + i;
             int g_y = p_origin.y * kChunkSize + j;
@@ -212,6 +214,7 @@ void RenderChunk::Update(Chunk &chunk, TextureManager &texture_manager, World &w
 // Draw Chunk
 void RenderChunk::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+    RENDERED_VERTICES += vertices_.getVertexCount();
     states.transform *= getTransform();
     states.texture = tileset_ptr_;
     target.draw(vertices_, states);
@@ -279,6 +282,7 @@ void RenderEntity::Update(Entity *entity, TextureManager &texture_manager)
 // Draw Entity
 void RenderEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+    RENDERED_VERTICES += vertices_.getVertexCount();
     states.transform *= getTransform();
     states.texture = tileset_ptr_;
     target.draw(vertices_, states);
@@ -288,7 +292,7 @@ void RenderWorld::Update(World &world, TextureManager &texture_manager)
 {
     for (auto &chunk : world.m_chunks)
     {
-        render_chunks_[chunk.first].Update(chunk.second, texture_manager, world);
+        render_chunks_[chunk.first].Update(chunk.second, texture_manager);
     }
     for (int i = 0; i < world.m_entities.size(); i++)
     {
@@ -301,6 +305,7 @@ void RenderWorld::Update(World &world, TextureManager &texture_manager)
 // Draw Everything
 void RenderWorld::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+    RENDERED_VERTICES = 0;
     for (auto &render_chunk : render_chunks_)
     {
         render_chunk.second.draw(target, sf::RenderStates(getTransform()));

@@ -18,7 +18,8 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/JSON)
 set(
     SEQUIOA_SOURCES
     src/Render/Render.cpp
-    src/Render/Renderer.cpp
+    # src/Render/Renderer.cpp
+    src/Render/WorldRenderer.cpp
     src/World/Block.cpp
     src/World/Chunk.cpp
     src/World/Entity.cpp

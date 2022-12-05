@@ -23,6 +23,10 @@ std::vector<Entity *> &World::GetEntities()
     return m_entities;
 }
 
+std::map<std::pair<int, int>, Chunk>& World::GetChunks() {
+    return m_chunks;
+}
+
 // TODO: add entity management system
 void World::SummonEntity(Entity &entity)
 {
@@ -120,12 +124,12 @@ void World::GenerateChunk(sf::Vector2i position)
 
 void World::GenerateChunkHeightMap(sf::Vector2i position)
 {
-    for (int i = 0; i < kChunkSize; i++)
+    for (int y = 0; y < kChunkSize; y++)
     {
-        for (int j = 0; j < kChunkSize; j++)
+        for (int x = 0; x < kChunkSize; x++)
         {
-            int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
-            int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
+            int current_x = x + position.x * kChunkSize + NOISE_OFFSET;
+            int current_y = y + position.y * kChunkSize + NOISE_OFFSET;
             float blockNoise = m_noise_generator.EvaluateFBM(
                 static_cast<float>(current_x),
                 static_cast<float>(current_y),
@@ -150,20 +154,20 @@ void World::GenerateChunkHeightMap(sf::Vector2i position)
             {
                 blockId = 1;
             }
-            m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, -1});
+            m_chunks[{position.x, position.y}].PlaceBlock({x, y}, {blockId, -1});
         }
     }
 }
 
 void World::GenerateChunkBiomeMap(sf::Vector2i position)
 {
-    for (int i = 0; i < kChunkSize; i++)
+    for (int y = 0; y < kChunkSize; y++)
     {
-        for (int j = 0; j < kChunkSize; j++)
+        for (int x = 0; x < kChunkSize; x++)
         {
-            int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
-            int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
-            int blockId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetId();
+            int current_x = x + position.x * kChunkSize + NOISE_OFFSET;
+            int current_y = y + position.y * kChunkSize + NOISE_OFFSET;
+            int blockId = m_chunks[{position.x, position.y}].GetBlock({x, y}).GetId();
 
             float noiseBiomeValue = m_noise_generator.EvaluateFBM(
                 static_cast<float>(current_x),
@@ -185,7 +189,7 @@ void World::GenerateChunkBiomeMap(sf::Vector2i position)
             {
                 biomeId = 1;
             }
-            m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, biomeId});
+            m_chunks[{position.x, position.y}].PlaceBlock({x, y}, {blockId, biomeId});
         }
     }
 }
@@ -195,15 +199,15 @@ void World::GenerateChunkFeatures(sf::Vector2i position)
     long long paired_val = pair(position.x, position.y);
     m_rng.seed(paired_val);
     std::uniform_int_distribution dist(0, 1023);
-    for (int i = 0; i < kChunkSize; i++)
+    for (int y = 0; y < kChunkSize; y++)
     {
-        for (int j = 0; j < kChunkSize; j++)
+        for (int x = 0; x < kChunkSize; x++)
         {
-            int current_x = i + position.x * kChunkSize + NOISE_OFFSET;
-            int current_y = j + position.y * kChunkSize + NOISE_OFFSET;
+            int current_x = x + position.x * kChunkSize + NOISE_OFFSET;
+            int current_y = y + position.y * kChunkSize + NOISE_OFFSET;
             int feature_weight = dist(m_rng);
-            int blockId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetId();
-            int biomeId = m_chunks[{position.x, position.y}].GetBlock({i, j}).GetBiome();
+            int blockId = m_chunks[{position.x, position.y}].GetBlock({x, y}).GetId();
+            int biomeId = m_chunks[{position.x, position.y}].GetBlock({x, y}).GetBiome();
             if (blockId == 1)
             {
                 if (feature_weight <= 10)
@@ -215,7 +219,7 @@ void World::GenerateChunkFeatures(sf::Vector2i position)
                     blockId = 3 + (feature_weight - 10) / 5;
                 }
             }
-            m_chunks[{position.x, position.y}].PlaceBlock({i, j}, {blockId, biomeId});
+            m_chunks[{position.x, position.y}].PlaceBlock({x, y}, {blockId, biomeId});
         }
     }
 }

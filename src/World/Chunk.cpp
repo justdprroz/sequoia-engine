@@ -1,43 +1,48 @@
 #include <World/Chunk.hpp>
 #include <fstream>
 #include <iostream>
+#include "Chunk.hpp"
 
 Chunk::Chunk(){
 
 };
 
-Chunk::Chunk(sf::Vector2i origin) : mOrigin(origin)
+Chunk::Chunk(sf::Vector2i origin) : origin_(origin)
 {
 }
 
 Block Chunk::GetBlock(sf::Vector2i position)
 {
-    return mBlocks[position.x][position.y];
+    return blocks_[position.y][position.x];
 }
 
+std::array<std::array<Block, kChunkSize>, kChunkSize> &Chunk::GetBlocks()
+{
+    return blocks_;
+}
 void Chunk::PlaceBlock(sf::Vector2i position, const Block &block)
 {
-    mBlocks[position.x][position.y] = block;
+    blocks_[position.y][position.x] = block;
 }
 
 sf::Vector2i Chunk::GetOrigin()
 {
-    return mOrigin;
+    return origin_;
 }
 
 void Chunk::SetGenerated()
 {
-    mIsGenerated = true;
+    is_generated_ = true;
 }
 
 void Chunk::SetGenerated(bool state)
 {
-    mIsGenerated = state;
+    is_generated_ = state;
 }
 
 bool Chunk::IsGenerated()
 {
-    return mIsGenerated;
+    return is_generated_;
 }
 
 // FIXME: normal serialization
@@ -54,7 +59,7 @@ void Chunk::SaveChunk(std::string file_path)
     {
         for (int j = 0; j < 16; j++)
         {
-            int l_id = mBlocks[i][j].GetId();
+            int l_id = blocks_[i][j].GetId();
             chunkfile.write(reinterpret_cast<char *>(&l_id), sizeof(l_id));
         }
     }
@@ -77,7 +82,7 @@ void Chunk::LoadChunk(std::string file_path)
         {
             int l_id;
             chunkfile.read(reinterpret_cast<char *>(&l_id), sizeof(l_id));
-            mBlocks[i][j] = {l_id};
+            blocks_[i][j] = {l_id};
         }
     }
     chunkfile.close();

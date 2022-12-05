@@ -32,7 +32,7 @@ void Player::HandleEvent(sf::Event &event) {
                 if (speed_ != 5) {
                     speed_ = 5;
                 } else {
-                    speed_ = 100;
+                    speed_ = 500;
                 }
             }
         }

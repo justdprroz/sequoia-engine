@@ -14,6 +14,7 @@ public:
     Chunk();
     Chunk(sf::Vector2i origin);
     Block GetBlock(sf::Vector2i position);
+    std::array<std::array<Block, kChunkSize>, kChunkSize>& GetBlocks();
     void PlaceBlock(sf::Vector2i position, const Block &block);
     sf::Vector2i GetOrigin();
     void SaveChunk(std::string file_path);
@@ -23,9 +24,9 @@ public:
     bool IsGenerated();
 
 private:
-    sf::Vector2i mOrigin;
-    bool mIsGenerated;
-    std::array<std::array<Block, kChunkSize>, kChunkSize> mBlocks;
+    sf::Vector2i origin_;
+    bool is_generated_;
+    std::array<std::array<Block, kChunkSize>, kChunkSize> blocks_;
     friend class RenderChunk;
     friend class Renderer;
 };

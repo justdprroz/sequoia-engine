@@ -30,6 +30,7 @@ public:
     World(int seed);
     void SetSeed(int seed);
     std::vector<Entity*>& GetEntities();
+    std::map<std::pair<int, int>, Chunk>& GetChunks();
     void SummonEntity(Entity &entity);
     Block GetBlock(sf::Vector2i position);
     void PlaceBlock(sf::Vector2i position, Block &block);

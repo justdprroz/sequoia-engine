@@ -1,8 +1,8 @@
 // Copyright 2021-2022 JustDprroz
 
 // Define guards
-#ifndef SOURCE_RENDER_HPP_
-#define SOURCE_RENDER_HPP_
+#ifndef SEQUOIA_ENGINE_SRC_RENDER_RENDER_
+#define SEQUOIA_ENGINE_SRC_RENDER_RENDER_
 
 // SFML
 #include <SFML/Graphics.hpp>
@@ -42,7 +42,7 @@ private:
 // Implements Custom Renderer for Chunks
 class RenderChunk : public sf::Drawable, public sf::Transformable {
 public:
-    void Update(Chunk& chunk, TextureManager& texture_manager, World &world);
+    void Update(Chunk& chunk, TextureManager& texture_manager);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
     sf::VertexArray vertices_;
@@ -69,4 +69,4 @@ private:
     std::vector<RenderEntity> render_entities_;
 };
 
-#endif
+#endif /* SEQUOIA_ENGINE_SRC_RENDER_RENDER_ */
